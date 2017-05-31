@@ -5,42 +5,42 @@ $(document).ready(function () {
     var op = "";
     $("#espr").val("");
 
-    $(".num").click(function () {
-        if ($(this).text() === "0" && txt === "") {
+    function numero(num) {
+        if (num === "0" && txt === "") {
             txt += "0";
         } else {
             if (txt === "0") {
-                txt = $(this).text();
+                txt = num;
             } else {
-                txt += $(this).text();
+                txt += num;
             }
         }
         $("#espr").val(txt);
-    });
+    }
 
-    $("#punto").click(function () {
+    function punto() {
         if (txt.indexOf(".") === -1 && txt !== "") {
-            txt += $(this).text();
+            txt += ".";
             $("#espr").val(txt);
         }
-    });
+    }
 
-    $(".oper").click(function () {
-        if ($(this).text() === "-" && txt === "") {
-            txt += $(this).text();
+    function operatore(oper) {
+        if (oper === "-" && txt === "") {
+            txt += oper;
             $("#espr").val(txt);
         } else if (op === "" && txt !== "" && txt !== "-") {
             n1 = parseFloat(txt);
-            op = $(this).text();
+            op = oper;
             $("#espr").val(txt + op);
             txt = "";
         } else if (op !== "") {
-            op = $(this).text();
+            op = oper;
             $("#espr").val(n1 + op);
         }
-    });
+    }
 
-    $("#uguale").click(function () {
+    function uguale() {
         if (txt !== "" && op !== "") {
             n2 = parseFloat(txt);
             switch (op) {
@@ -63,5 +63,46 @@ $(document).ready(function () {
             op = "";
             txt = "";
         }
+    }
+
+    $(document).keypress(function (ev) {
+        var tasto = ev.which;
+        if (tasto >= 48 && tasto <= 57) {
+            numero(tasto - 48 + "");
+        } else {
+            switch (tasto) {
+                case 13:
+                    uguale();
+                    break;
+                case 43:
+                    operatore("+");
+                    break;
+                case 47:
+                    operatore("/");
+                    break;
+                case 42:
+                    operatore("*");
+                    break;
+                case 45:
+                    operatore("-");
+                    break;
+                case 46:
+                    punto();
+                    break;
+            }
+        }
+
     });
+
+    $(".num").click(function () {
+        numero($(this).text());
+    });
+
+    $("#punto").click(punto);
+
+    $(".oper").click(function () {
+        operatore($(this).text());
+    });
+
+    $("#uguale").click(uguale);
 });
