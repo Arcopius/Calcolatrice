@@ -5,6 +5,31 @@ $(document).ready(function () {
     var op = "";
     $("#espr").val("");
 
+    function risolvi() {
+        if (txt !== "" && op !== "") {
+            n2 = parseFloat(txt);
+            switch (op) {
+                case "+":
+                    txt = n1 + n2;
+                    break;
+                case "-":
+                    txt = n1 - n2;
+                    break;
+                case "*":
+                    txt = n1 * n2;
+                    break;
+                case "/":
+                    txt = n1 / n2;
+                    break;
+            }
+            $("#espr").val(txt);
+            n1 = txt;
+            n2 = "";
+            op = "";
+            txt = "";
+        }
+    }
+
     $(".num").click(function () {
         if ($(this).text() === "0" && txt === "") {
             txt += "0";
@@ -34,34 +59,16 @@ $(document).ready(function () {
             op = $(this).text();
             $("#espr").val(txt + op);
             txt = "";
-        } else if (op !== "") {
+        } else if (op !== "" && txt === "") {
             op = $(this).text();
             $("#espr").val(n1 + op);
-        }
-    });
-
-    $("#uguale").click(function () {
-        if (txt !== "" && op !== "") {
-            n2 = parseFloat(txt);
-            switch (op) {
-                case "+":
-                    txt = n1 + n2;
-                    break;
-                case "-":
-                    txt = n1 - n2;
-                    break;
-                case "*":
-                    txt = n1 * n2;
-                    break;
-                case "/":
-                    txt = n1 / n2;
-                    break;
-            }
-            $("#espr").val(txt);
-            n1 = "";
-            n2 = "";
-            op = "";
+        } else if (n1 !== "") {
+            risolvi();
+            op = $(this).text();
+            $("#espr").val(n1 + op);
             txt = "";
         }
     });
+
+    $("#uguale").click(risolvi);
 });
