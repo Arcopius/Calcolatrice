@@ -5,7 +5,49 @@ $(document).ready(function () {
     var op = "";
     $("#espr").val("");
 
-    function risolvi() {
+    function numero(num) {
+        if (num === "0" && txt === "") {
+            txt += "0";
+        } else {
+            if (txt === "0") {
+                txt = num;
+            } else {
+                txt += num;
+            }
+        }
+        $("#espr").val(txt);
+    }
+
+    function punto() {
+        if (txt.indexOf(".") === -1 && txt !== "") {
+            txt += ".";
+            $("#espr").val(txt);
+        }
+    }
+
+    function operatore(oper) {
+        if (txt[txt.length - 1] !== ".") {
+            if (oper === "-" && txt === "") {
+                txt += oper;
+                $("#espr").val(txt);
+            } else if (op === "" && txt !== "" && txt !== "-") {
+                n1 = parseFloat(txt);
+                op = oper;
+                $("#espr").val(txt + op);
+                txt = "";
+            } else if (op !== "" && txt === "") {
+                op = oper;
+                $("#espr").val(n1 + op);
+            } else if (n1 !== "") {
+                uguale();
+                op = oper;
+                $("#espr").val(n1 + op);
+                txt = "";
+            }
+        }
+    }
+
+    function uguale() {
         if (txt !== "" && op !== "") {
             n2 = parseFloat(txt);
             switch (op) {
@@ -30,45 +72,44 @@ $(document).ready(function () {
         }
     }
 
-    $(".num").click(function () {
-        if ($(this).text() === "0" && txt === "") {
-            txt += "0";
+    $(document).keypress(function (ev) {
+        var tasto = ev.which;
+        if (tasto >= 48 && tasto <= 57) {
+            numero(tasto - 48 + "");
         } else {
-            if (txt === "0") {
-                txt = $(this).text();
-            } else {
-                txt += $(this).text();
+            switch (tasto) {
+                case 13:
+                    uguale();
+                    break;
+                case 43:
+                    operatore("+");
+                    break;
+                case 47:
+                    operatore("/");
+                    break;
+                case 42:
+                    operatore("*");
+                    break;
+                case 45:
+                    operatore("-");
+                    break;
+                case 46:
+                    punto();
+                    break;
             }
         }
-        $("#espr").val(txt);
+
     });
 
-    $("#punto").click(function () {
-        if (txt.indexOf(".") === -1 && txt !== "") {
-            txt += $(this).text();
-            $("#espr").val(txt);
-        }
+    $(".num").click(function () {
+        numero($(this).text());
     });
+
+    $("#punto").click(punto);
 
     $(".oper").click(function () {
-        if ($(this).text() === "-" && txt === "") {
-            txt += $(this).text();
-            $("#espr").val(txt);
-        } else if (op === "" && txt !== "" && txt !== "-") {
-            n1 = parseFloat(txt);
-            op = $(this).text();
-            $("#espr").val(txt + op);
-            txt = "";
-        } else if (op !== "" && txt === "") {
-            op = $(this).text();
-            $("#espr").val(n1 + op);
-        } else if (n1 !== "") {
-            risolvi();
-            op = $(this).text();
-            $("#espr").val(n1 + op);
-            txt = "";
-        }
+        operatore($(this).text());
     });
 
-    $("#uguale").click(risolvi);
+    $("#uguale").click(uguale);
 });
