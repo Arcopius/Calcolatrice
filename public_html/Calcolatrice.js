@@ -5,49 +5,42 @@ $(document).ready(function () {
     var op = "";
     $("#espr").val("");
 
-    function numero(num) {
-        if (num === "0" && txt === "") {
+    $(".num").click(function () {
+        if ($(this).text() === "0" && txt === "") {
             txt += "0";
         } else {
             if (txt === "0") {
-                txt = num;
+                txt = $(this).text();
             } else {
-                txt += num;
+                txt += $(this).text();
             }
         }
         $("#espr").val(txt);
-    }
+    });
 
-    function punto() {
+    $("#punto").click(function () {
         if (txt.indexOf(".") === -1 && txt !== "") {
-            txt += ".";
+            txt += $(this).text();
             $("#espr").val(txt);
         }
-    }
+    });
 
-    function operatore(oper) {
-        if (txt[txt.length - 1] !== ".") {
-            if (oper === "-" && txt === "") {
-                txt += oper;
-                $("#espr").val(txt);
-            } else if (op === "" && txt !== "" && txt !== "-") {
-                n1 = parseFloat(txt);
-                op = oper;
-                $("#espr").val(txt + op);
-                txt = "";
-            } else if (op !== "" && txt === "") {
-                op = oper;
-                $("#espr").val(n1 + op);
-            } else if (n1 !== "") {
-                uguale();
-                op = oper;
-                $("#espr").val(n1 + op);
-                txt = "";
-            }
+    $(".oper").click(function () {
+        if ($(this).text() === "-" && txt === "") {
+            txt += $(this).text();
+            $("#espr").val(txt);
+        } else if (op === "" && txt !== "" && txt !== "-") {
+            n1 = parseFloat(txt);
+            op = $(this).text();
+            $("#espr").val(txt + op);
+            txt = "";
+        } else if (op !== "") {
+            op = $(this).text();
+            $("#espr").val(n1 + op);
         }
-    }
+    });
 
-    function uguale() {
+    $("#uguale").click(function () {
         if (txt !== "" && op !== "") {
             n2 = parseFloat(txt);
             switch (op) {
@@ -65,52 +58,10 @@ $(document).ready(function () {
                     break;
             }
             $("#espr").val(txt);
-            n1 = txt;
+            n1 = "";
             n2 = "";
             op = "";
             txt = "";
         }
-    }
-
-    $(document).keypress(function (ev) {
-        var tasto = ev.which;
-        if (tasto >= 48 && tasto <= 57) {
-            numero(tasto - 48 + "");
-        } else {
-            switch (tasto) {
-                case 13:
-                    uguale();
-                    break;
-                case 43:
-                    operatore("+");
-                    break;
-                case 47:
-                    operatore("/");
-                    break;
-                case 42:
-                    operatore("*");
-                    break;
-                case 45:
-                    operatore("-");
-                    break;
-                case 46:
-                    punto();
-                    break;
-            }
-        }
-
     });
-
-    $(".num").click(function () {
-        numero($(this).text());
-    });
-
-    $("#punto").click(punto);
-
-    $(".oper").click(function () {
-        operatore($(this).text());
-    });
-
-    $("#uguale").click(uguale);
 });
-
