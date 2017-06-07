@@ -26,17 +26,24 @@ $(document).ready(function () {
     }
 
     function operatore(oper) {
-        if (oper === "-" && txt === "") {
-            txt += oper;
-            $("#espr").val(txt);
-        } else if (op === "" && txt !== "" && txt !== "-") {
-            n1 = parseFloat(txt);
-            op = oper;
-            $("#espr").val(txt + op);
-            txt = "";
-        } else if (op !== "") {
-            op = oper;
-            $("#espr").val(n1 + op);
+        if (txt[txt.length - 1] !== ".") {
+            if (oper === "-" && txt === "") {
+                txt += oper;
+                $("#espr").val(txt);
+            } else if (op === "" && txt !== "" && txt !== "-") {
+                n1 = parseFloat(txt);
+                op = oper;
+                $("#espr").val(txt + op);
+                txt = "";
+            } else if (op !== "" && txt === "") {
+                op = oper;
+                $("#espr").val(n1 + op);
+            } else if (n1 !== "") {
+                uguale();
+                op = oper;
+                $("#espr").val(n1 + op);
+                txt = "";
+            }
         }
     }
 
@@ -58,7 +65,7 @@ $(document).ready(function () {
                     break;
             }
             $("#espr").val(txt);
-            n1 = "";
+            n1 = txt;
             n2 = "";
             op = "";
             txt = "";
